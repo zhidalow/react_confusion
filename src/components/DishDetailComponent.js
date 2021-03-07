@@ -24,7 +24,11 @@ renderDish (selectedDish) {
 }
 
 rendercomments (selectedDish) {
-    const listitems = selectedDish.comments.map((group) => //variable included inside the function, that's why got double brackets at the start
+    <h4>Comments</h4>
+    if (selectedDish != null) {
+
+    const listitems = selectedDish.comments.map((group) => {/*variable included inside the function, that's why got double brackets at the start*/
+            return (
        
             <p style={{fontSize:12}}>
             <p key={group.comment}>
@@ -35,14 +39,20 @@ rendercomments (selectedDish) {
                     {group.author + " " + group.date.substring(0,10)}
                 </li>
             </ul>
-            </p>
+            </p>)
         
-        
+}
     );
      
           return (
               <div>{listitems}</div>
           )
+}
+    else {
+        return(
+            <div></div>
+        );
+    }
 }
 
             
@@ -56,7 +66,7 @@ rendercomments (selectedDish) {
                 </div>
                 
                 <div className="col-xs-12 col-sm-12 col-md-5 m-1">
-                    <h4>Comments</h4>
+                    
                     {this.rendercomments(this.props.selectedDish)}
                 </div>
             </div>
