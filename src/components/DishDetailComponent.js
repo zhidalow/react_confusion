@@ -1,21 +1,10 @@
-import React, { Component } from 'react';
+//removing "Component" import since we can implement this component as functional component instead (functions)
+import React /* , { Component }  */ from 'react'; 
+
 import { Card, CardImg, CardText, CardBody, CardTitle} from 'reactstrap';
 
+    function RenderDish ({dish}) {
 
-class DishDetail extends Component {
-
-    //this chunk is to demo lifecycle components and shoes the order in which the components render/mount changes to DOM 
-
-    /*componentDidMount() {
-        console.log('DishDetail Component componentDidMount is invoked')
-        }
-
-    componentDidUpdate() {
-        console.log('DishDetail Component componentDidUpdate is invoked')
-    }*/ 
-
-    renderDish (dish) {
-        if (dish != null) {
             return(
                 <Card>
                     <CardImg width="100%" src={dish.image} alt={dish.name} />
@@ -24,20 +13,13 @@ class DishDetail extends Component {
                         <CardText>{dish.description}</CardText>
                     </CardBody>
                 </Card>
-            )
-        }
-        else {
-            return(
-            <div></div>
             );
         }
-    }
 
-    rendercomments (dish) {
-        
-        if (dish != null) {
-        
-        const listitems = dish.comments.map((group) => {/*variable included inside the function, that's why got double brackets at the start*/
+
+    function RenderComments ({comments}) {      
+         
+        const listitems = comments.map((group) => {/*variable included inside the function, that's why got double brackets at the start*/
                 return (
         
                 <div style={{fontSize:14}}>
@@ -62,36 +44,30 @@ class DishDetail extends Component {
                     </div>
             )
     }
+            
+
+    const DishDetail = (props) => {
+
+        if (props.dish != null) {
+            return(
+                <div className="container">
+                    <div className="row">
+                        <div className="col-xs-12 col-sm-12 col-md-5 m-1">
+                            <RenderDish dish={props.dish} />
+                        </div>
+                        
+                        <div className="col-xs-12 col-sm-12 col-md-5 m-1">
+                            <RenderComments comments={props.dish.comments} />
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+
         else {
             return(
                 <div></div>
             );
         }
     }
-
-            
-
-    render() {
-
-        //this chunk is to demo lifecycle components and shoes the order in which the components render/mount changes to DOM 
-
-        //console.log('DishDetail Component render is invoked');
-
-        return(
-            <div className="container">
-                <div className="row">
-                    <div className="col-xs-12 col-sm-12 col-md-5 m-1">
-                        {this.renderDish(this.props.dish)}
-                    </div>
-                    
-                    <div className="col-xs-12 col-sm-12 col-md-5 m-1">
-                        {this.rendercomments(this.props.dish)}
-                    </div>
-                </div>
-            </div>
-        )
-        
-      
-    }
-}
 export default DishDetail;
