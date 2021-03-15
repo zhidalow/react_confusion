@@ -44,6 +44,17 @@ class Main extends Component {
         );
     }
 
+    const DishWithId = ({match}) => {
+      return(
+        
+        //parseInt(match.params.dishId,10) : parseInt converts string to int, 2nd param is what base (base 10 usually)
+        //match.params where "params" contains all key-value pairs (like a dictionary)
+        <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
+        comment={this.state.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} />
+      );
+
+    }
+
     return (
       <div>
         <Header />
@@ -54,6 +65,9 @@ class Main extends Component {
 
             {/* need to define in line functional component so that can pass props to "MenuComponent" */}
             <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />} />
+
+            {/* ":" passes whatever is after the ":" as a token with 3 props: "match","location" and "history" */}
+            <Route path="/menu/:dishId" component={DishWithId} />
 
             <Route exact path="/contactus" component={Contact} />
 
