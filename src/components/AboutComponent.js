@@ -19,7 +19,9 @@ function RenderLeader({leader}) {
             </Media>
             <Media body className="ml-5">
                 <Media heading>{leader.name}</Media>
-                <h5>{leader.designation}</h5>
+
+                {/* inline CSS must be in js object form*/}
+                <h5 /*style={{color: "red"}}*/>{leader.designation}</h5>
                 <p>{leader.description}</p>
             </Media>        
         </Media>                                  
