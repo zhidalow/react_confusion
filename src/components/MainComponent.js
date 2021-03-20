@@ -12,6 +12,7 @@ import {LEADERS} from '../shared/leaders';
 import {PROMOTIONS} from '../shared/promotions';
 import { Component } from 'react';
 import Home from'./HomeComponent';
+import About from './AboutComponent';
 import { Switch, Route, Redirect} from 'react-router-dom';
 
 class Main extends Component {
@@ -70,6 +71,9 @@ class Main extends Component {
             <Route path="/menu/:dishId" component={DishWithId} />
 
             <Route exact path="/contactus" component={Contact} />
+
+            {/* implementing "Route" for aboutus page */}
+            <Route path="/aboutus" component={() => <About leaders={this.state.leaders}/>} />
 
             {/* "Redirect" is for default path in case the path does not match any single one of the "Routes" path */}
             <Redirect to="/home" />
