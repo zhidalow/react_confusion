@@ -153,7 +153,8 @@ class Contact extends Component {
                                     <Input type="text" id="firstname" name="firstname" 
                                     placeholder="First Name" value={this.state.firstname} 
 
-                                    // valid/invalid is boolean variable
+                                    // valid/invalid is boolean variable. default is <FormFeedback invalid> which shows the variable when <Input invalid = true>
+                                    //needs the valid/invalid parameters in <Input> to decide when to show object in <FormFeedback>
                                     valid={errors.firstname === ''}
                                     invalid={errors.firstname !== ''}
                                     onBlur={this.handleBlur('firstname')}
