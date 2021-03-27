@@ -6,25 +6,26 @@ import Contact from './ContactComponent';
 import DishDetail from './DishDetailComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
-import {DISHES} from '../shared/dishes'; //"../" means go up one level in folder directory. in this case will land on src, then find "shared" folder then "dishes" file
-import {COMMENTS} from '../shared/comments';
-import {LEADERS} from '../shared/leaders';
-import {PROMOTIONS} from '../shared/promotions';
 import { Component } from 'react';
 import Home from'./HomeComponent';
 import About from './AboutComponent';
-import { Switch, Route, Redirect} from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter} from 'react-router-dom';
+import { connect } from 'react-redux';
+
+//converting reduxStore's state into props that will be available for use in MainComponent which will pass to all other components
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders
+  }  
+}
 
 class Main extends Component {
-  constructor(props) { //rmb only class objs can use state 
+  
+  constructor(props) { 
     super(props);
-
-    this.state={
-      dishes: DISHES,
-      comments: COMMENTS,
-      leaders: LEADERS,
-      promotions: PROMOTIONS
-    };
   }
   
 
@@ -38,9 +39,9 @@ class Main extends Component {
           //RHS of (dish) => dish.featured is the boolean condition, LHS is the object you want to be returned
           //IMPT NOTE: array slicing only takes place after filter is complete i.e put [0] outside of filter code
             <Home 
-              dish={this.state.dishes.filter((dish) => dish.featured)[0]} 
-              promo={this.state.promotions.filter((promo) => promo.featured)[0]} 
-              leader={this.state.leaders.filter((leader) => leader.featured)[0]}
+              dish={this.props.dishes.filter((dish) => dish.featured)[0]} 
+              promo={this.props.promotions.filter((promo) => promo.featured)[0]} 
+              leader={this.props.leaders.filter((leader) => leader.featured)[0]}
             />
         );
     }
@@ -50,8 +51,8 @@ class Main extends Component {
         
         //parseInt(match.params.dishId,10) : parseInt converts string to int, 2nd param is what base (base 10 usually)
         //match.params where "params" contains all key-value pairs (like a dictionary)
-        <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
-        comment={this.state.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} />
+        <DishDetail dish={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
+        comment={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} />
       );
 
     }
@@ -65,7 +66,7 @@ class Main extends Component {
             <Route path="/home" component={HomePage} />
 
             {/* need to define in line functional component so that can pass props to "MenuComponent" */}
-            <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />} />
+            <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes} />} />
 
             {/* ":" passes whatever is after the ":" as a token with 3 props: "match","location" and "history" */}
             <Route path="/menu/:dishId" component={DishWithId} />
@@ -73,7 +74,7 @@ class Main extends Component {
             <Route exact path="/contactus" component={Contact} />
 
             {/* implementing "Route" for aboutus page */}
-            <Route path="/aboutus" component={() => <About leaders={this.state.leaders}/>} />
+            <Route path="/aboutus" component={() => <About leaders={this.props.leaders}/>} />
 
             {/* "Redirect" is for default path in case the path does not match any single one of the "Routes" path */}
             <Redirect to="/home" />
@@ -83,4 +84,6 @@ class Main extends Component {
     );
   }
 }
-export default Main; //export must put outside of the 'component' code 
+
+// "connect" first input is mapStateToProps, will call the function and pass it to "MainComponent" as props
+export default withRouter(connect(mapStateToProps)(Main)); 
