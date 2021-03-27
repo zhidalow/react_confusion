@@ -27,6 +27,8 @@ class Contact extends Component {
         this.handleBlur = this.handleBlur.bind(this);
     }
 
+    //curried functions: handleBlur function is taking "field" param and returning another function with "evt" as its input. "evt" is the onBlur event listener 
+    //w/o curried functions the handleBlur function will just run forever when target is not in focus
     handleBlur = (field) => (evt) => {
         this.setState({
 
