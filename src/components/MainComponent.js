@@ -24,11 +24,6 @@ const mapStateToProps = state => {
 
 class Main extends Component {
   
-  constructor(props) { 
-    super(props);
-  }
-  
-
   render() { //class...extends method must have render() {} structure inside
 
     //defining the functinoal component "HomePage"      
@@ -71,7 +66,7 @@ class Main extends Component {
             {/* ":" passes whatever is after the ":" as a token with 3 props: "match","location" and "history" */}
             <Route path="/menu/:dishId" component={DishWithId} />
 
-            <Route exact path="/contactus" component={Contact} />
+            <Route exact path="/contactus" component = {Contact} />
 
             {/* implementing "Route" for aboutus page */}
             <Route path="/aboutus" component={() => <About leaders={this.props.leaders}/>} />

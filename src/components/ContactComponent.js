@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Breadcrumb, BreadcrumbItem, Button, Col, Row, Label } from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Button, Label, Col, Row } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 // react-redux-form simplifies many of the form creation implementation; no longer need handleBlur, handleChange, 
 //no need store state within "ContactComponent", all state changes handled by redux instead now
 import { Control, LocalForm, Errors } from 'react-redux-form';
-import { Link } from 'react-router-dom';
 
 class Contact extends Component {
 
@@ -12,16 +12,13 @@ class Contact extends Component {
         super(props);
 
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
+        }
 
     //updating input to be js obj "values", as we are no longer keeping track of values using "this.state"
     handleSubmit(values) {
         console.log("Current State is: " + JSON.stringify(values));
         alert("Current State is: " + JSON.stringify(values));
-        // event.preventDefault();
     }
-    
-
 
     render() {
 
@@ -66,8 +63,6 @@ class Contact extends Component {
                     <div className="col-12 col-sm-11 offset-sm-1">
                         <div className="btn-group" role="group">
                             <a role="button" className="btn btn-primary" href="tel:+85212345678"><i className="fa fa-phone"></i> Call</a>
-                            
-                            {/* need to add a href for skype link if we want to link to skype */}
                             <a role="button" className="btn btn-info"><i className="fa fa-skype"></i> Skype</a>
                             <a role="button" className="btn btn-success" href="mailto:confusion@food.net"><i className="fa fa-envelope-o"></i> Email</a>
                         </div>
@@ -81,84 +76,79 @@ class Contact extends Component {
 
                     <div className="col-12 col-md-9">
                         <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
-                            {/* 'Row' one row of the form. using bootgrap's grid inside the Form to layout various form elements */}
-                            <Row className="form-group">
-                                
-                                {/* md{2} means for medium to xtra large screen sizes, this label will take up 2 columns */}
-                                <Label htmlfor="firstname" md={2}>First Name</Label>
-                                
-                                {/* Col in reactstrap is like 'div' in html. Needs "form-control" className */}
-                                <Col md={10}>
-                                    <Control.Text model=".firstname" id="firstname" name="firstname"
-                                        placeholder="First Name"
-                                        className="form-control"
-                                        />
-                                </Col>
-                            </Row>
+                                <Row className="form-group">
+                                    <Label htmlFor="firstname" md={2}>First Name</Label>
 
-                            <Row className="form-group">                                
-                                <Label htmlfor="lastname" md={2}>Last Name</Label>
+                                    {/* Col in reactstrap is like 'div' in html. Needs "form-control" className */}
+                                    <Col md={10}>
+                                        <Control.text model=".firstname" id="firstname" name="firstname"
+                                            placeholder="First Name"
+                                            className="form-control"
+                                            />
+                                    </Col>
+                                </Row>
+                                <Row className="form-group">
+                                <Label htmlFor="lastname" md={2}>Last Name</Label>
                                 <Col md={10}>
-                                    <Control.Text model=".lastname" id="lastname" name="lastname"
+                                    <Control.text model=".lastname" id="lastname" name="lastname"
                                         placeholder="Last Name"
                                         className="form-control"
                                          />
                                 </Col>
                             </Row>
 
-                            <Row className="form-group">                                
-                                <Label htmlfor="telnum" md={2}>Contact Tel.</Label>
+                            <Row className="form-group">
+                                <Label htmlFor="telnum" md={2}>Contact Tel.</Label>
                                 <Col md={10}>
-                                    <Control.Text model=".telnum" id="telnum" name="telnum"
+                                    <Control.text model=".telnum" id="telnum" name="telnum"
                                         placeholder="Tel. Number"
                                         className="form-control"
                                          />
                                 </Col>
                             </Row>
 
-                            <Row className="form-group">                                
-                                <Label htmlfor="email" md={2}>Email</Label>
+                            <Row className="form-group">
+                                <Label htmlFor="email" md={2}>Email</Label>
                                 <Col md={10}>
-                                    <Control.Text model=".email" id="email" name="email"
+                                    <Control.text model=".email" id="email" name="email"
                                         placeholder="Email"
                                         className="form-control" />
                                 </Col>
                             </Row>
 
                             <Row className="form-group">
-                                <Col md={{size: 6, offset:2}}> {/*occupying  6 cols, but pushed 2 cols to the right*/}
+                                <Col md={{size: 6, offset: 2}}>
                                     <div className="form-check">
                                         <Label check>
-                                            <Control.Checkbox model=".agree" name="agree"
+                                            <Control.checkbox model=".agree" name="agree"
                                                 className="form-check-input"
                                                  /> {' '}
                                                 <strong>May we contact you?</strong>
                                         </Label>
-                                    </div>                                
+                                    </div>
                                 </Col>
-
-                                <Col md={{size: 3, offset:1}}>
-                                    <Control.Select model=".contactType" name="contactType"
+                                <Col md={{size: 3, offset: 1}}>
+                                    <Control.select model=".contactType" name="contactType"
                                         className="form-control">
                                         <option>Tel.</option>
                                         <option>Email</option>
-                                    </Control.Select>
+                                    </Control.select>
                                 </Col>
                             </Row>
 
-                            <Row className="form-group">                                
-                                <Label htmlfor="message" md={2}>Your Feedback</Label>
+                            <Row className="form-group">
+                                <Label htmlFor="message" md={2}>Your Feedback</Label>
                                 <Col md={10}>
-                                    <Control.Textarea model=".message" id="message" name="message"
+                                    <Control.textarea model=".message" id="message" name="message"
                                         rows="12"
                                         className="form-control" />
                                 </Col>
                             </Row>
 
-                            <Row className="form-group">                                
-                                <Col md={{size:10, offset:2}}>
+                            <Row className="form-group">
+                                <Col md={{size:10, offset: 2}}>
                                     <Button type="submit" color="primary">
-                                        Send Feedback
+                                    Send Feedback
                                     </Button>
                                 </Col>
                             </Row>
