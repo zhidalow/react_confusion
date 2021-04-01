@@ -3,6 +3,8 @@ import React /* , { Component }  */ from 'react';
 
 import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 import { Link } from 'react-router-dom';
+import Comment from './CommentFormComponent';
+
 
     function RenderDish ({dish}) {
 
@@ -42,7 +44,9 @@ import { Link } from 'react-router-dom';
                     <div>
                     <h4>Comments</h4>
                         {listitems}
+                        <Comment />
                     </div>
+
             )
     }
             
