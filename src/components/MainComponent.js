@@ -11,6 +11,7 @@ import Home from'./HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
+import { addComment } from '../redux/ActionCreators';
 
 //converting reduxStore's state into props that will be available for use in MainComponent which will pass to all other components
 const mapStateToProps = state => {
@@ -20,6 +21,16 @@ const mapStateToProps = state => {
     promotions: state.promotions,
     leaders: state.leaders
   }  
+}
+
+//need to call as a function similar to "mapStateToProps"
+const mapDispatchToProps = (dispatch) => {
+
+  return {
+    //"addComment" is an action creator. returns a curried function, where "addComment" input has 4 variables (dishId, rating, author, comment)
+    //dispatch method needs "ActionCreator" params to send values to Redux store
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+  }
 }
 
 class Main extends Component {
@@ -47,7 +58,11 @@ class Main extends Component {
         //parseInt(match.params.dishId,10) : parseInt converts string to int, 2nd param is what base (base 10 usually)
         //match.params where "params" contains all key-value pairs (like a dictionary)
         <DishDetail dish={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
-        comment={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} />
+        comment={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
+        
+        //passing addComment as props ("addComment" converted to props by "mapDispatchtoProps" function). Pass the "addComment" function to "DishDetail" component,
+        //where the user inputs their feedback of the food 
+        addComment={this.props.addComment} />
       );
 
     }
@@ -80,5 +95,6 @@ class Main extends Component {
   }
 }
 
-// "connect" first input is mapStateToProps, will call the function and pass it to "MainComponent" as props
-export default withRouter(connect(mapStateToProps)(Main)); 
+// "connect" first input is mapStateToProps, will call the function and pass it to "MainComponent" as props.
+//Similar case for "mapDispatchToProps", adding it to "connect" params here makes the props available for use in "MainComponent"
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main)); 
