@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardImg, CardImgOverlay, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent';
 
 //functional Component "RenderMenuItem" and "Menu" creation. Functional components only need to receive props from parent component to work, simplifies implementation in code
 
@@ -24,7 +25,7 @@ function RenderMenuItem({ dish }) {
 
   const Menu= (props) => { /* props is the input, similar to function definition style on top, only syntax is different */
 
-    const menu = props.dishes.map((dish) => { //need to remove "this", since props is now an incoming variable to a functions rather than as props from MainComponent
+    const menu = props.dishes.dishes.map((dish) => { //need to remove "this", since props is now an incoming variable to a functions rather than as props from MainComponent
 
       /*map is to iterate over each item in the js array; 
       dish is like python element loop iteration, each item is called 'dish', 
@@ -35,7 +36,29 @@ function RenderMenuItem({ dish }) {
         </div>
       );
     });
-  
+
+    if (props.dishes.isLoading) {
+      return(
+          <div className="container">
+              <div className="row">            
+                  <Loading />
+              </div>
+          </div>
+      );
+    }
+    else if (props.dishes.errMess) {
+        return(
+            <div className="container">
+                <div className="row"> 
+                    <div className="col-12">
+                        <h4>{props.dishes.errMess}</h4>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    else  
       return (
         <div className="container">
           <div className="row">

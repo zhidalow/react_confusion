@@ -11,7 +11,7 @@ import Home from'./HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment } from '../redux/ActionCreators';
+import { addComment, fetchDishes } from '../redux/ActionCreators';
 
 //converting reduxStore's state into props that will be available for use in MainComponent which will pass to all other components
 const mapStateToProps = state => {
@@ -29,11 +29,19 @@ const mapDispatchToProps = (dispatch) => {
   return {
     //"addComment" is an action creator. returns a curried function, where "addComment" input has 4 variables (dishId, rating, author, comment)
     //dispatch method needs "ActionCreator" params to send values to Redux store
-    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+    fetchDishes: () => {dispatch(fetchDishes())}
   }
 }
 
 class Main extends Component {
+
+  //when "MainComponent" being mounted into view (by react application), at the point after it gets mounted, 
+  //fetchDishes will be called, dishes info will be fetched and loaded into redux store, and dishes is then made available to "MainComponent"
+  //calling fetchDishes() thunk here (mini async function, rest of Components will still load while fetching dish info from Redux store)
+  componentDidMount() {
+    this.props.fetchDishes();
+  }
   
   render() { //class...extends method must have render() {} structure inside
 
@@ -45,7 +53,9 @@ class Main extends Component {
           //RHS of (dish) => dish.featured is the boolean condition, LHS is the object you want to be returned
           //IMPT NOTE: array slicing only takes place after filter is complete i.e put [0] outside of filter code
             <Home 
-              dish={this.props.dishes.filter((dish) => dish.featured)[0]} 
+              dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
+              dishesLoading={this.props.dishes.isLoading}
+              dishesErrMess={this.props.dishes.errMess} 
               promo={this.props.promotions.filter((promo) => promo.featured)[0]} 
               leader={this.props.leaders.filter((leader) => leader.featured)[0]}
             />
@@ -57,7 +67,9 @@ class Main extends Component {
         
         //parseInt(match.params.dishId,10) : parseInt converts string to int, 2nd param is what base (base 10 usually)
         //match.params where "params" contains all key-value pairs (like a dictionary)
-        <DishDetail dish={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
+        <DishDetail dish={this.props.dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
+        isLoading={this.props.dishes.isLoading}
+        errMess={this.props.dishes.errMess}
         comment={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
         
         //passing addComment as props ("addComment" converted to props by "mapDispatchtoProps" function). Pass the "addComment" function to "DishDetail" component,
