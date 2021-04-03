@@ -12,6 +12,8 @@ import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addComment, fetchDishes } from '../redux/ActionCreators';
+import { actions } from 'react-redux-form';
+
 
 //converting reduxStore's state into props that will be available for use in MainComponent which will pass to all other components
 const mapStateToProps = state => {
@@ -30,7 +32,8 @@ const mapDispatchToProps = (dispatch) => {
     //"addComment" is an action creator. returns a curried function, where "addComment" input has 4 variables (dishId, rating, author, comment)
     //dispatch method needs "ActionCreator" params to send values to Redux store
     addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
-    fetchDishes: () => {dispatch(fetchDishes())}
+    fetchDishes: () => {dispatch(fetchDishes())},
+    resetFeedbackForm: () => { dispatch(actions.reset('feedback'))}
   }
 }
 
@@ -93,7 +96,7 @@ class Main extends Component {
             {/* ":" passes whatever is after the ":" as a token with 3 props: "match","location" and "history" */}
             <Route path="/menu/:dishId" component={DishWithId} />
 
-            <Route exact path="/contactus" component = {Contact} />
+            <Route exact path="/contactus" component = {() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
 
             {/* implementing "Route" for aboutus page */}
             <Route path="/aboutus" component={() => <About leaders={this.props.leaders}/>} />
