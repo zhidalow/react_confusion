@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardImg, CardImgOverlay, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 //functional Component "RenderMenuItem" and "Menu" creation. Functional components only need to receive props from parent component to work, simplifies implementation in code
 
@@ -13,7 +14,7 @@ function RenderMenuItem({ dish }) {
       {/* when clicking on each "Card" object, will link to "to={`/menu/${dish.id}`}". Then will run through Route in "MainComponent"
       <Route path="/menu/:dishId" component={DishWithId} /> will only fulfil for this Route path. Finally, {dish.id} info is sent as params.dishId through Route parameters to DishWithId functional component */}
       <Link to={`/menu/${dish.id}`}>
-              <CardImg wdith="100%" src={dish.image} alt={dish.name} />
+              <CardImg wdith="100%" src={baseUrl + dish.image} alt={dish.name} />
               <CardImgOverlay body className="ml-5">
               <CardTitle>{dish.name}</CardTitle>
             </CardImgOverlay>

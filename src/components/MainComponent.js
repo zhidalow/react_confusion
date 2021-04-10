@@ -11,7 +11,7 @@ import Home from'./HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment, fetchDishes } from '../redux/ActionCreators';
+import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 
@@ -33,7 +33,9 @@ const mapDispatchToProps = (dispatch) => {
     //dispatch method needs "ActionCreator" params to send values to Redux store
     addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
     fetchDishes: () => {dispatch(fetchDishes())},
-    resetFeedbackForm: () => { dispatch(actions.reset('feedback'))}
+    resetFeedbackForm: () => { dispatch(actions.reset('feedback'))},
+    fetchComments: () => dispatch(fetchComments()),
+    fetchPromos: () => dispatch(fetchPromos())
   }
 }
 
@@ -44,6 +46,8 @@ class Main extends Component {
   //calling fetchDishes() thunk here (mini async function, rest of Components will still load while fetching dish info from Redux store)
   componentDidMount() {
     this.props.fetchDishes();
+    this.props.fetchComments();
+    this.props.fetchPromos();
   }
   
   render() { //class...extends method must have render() {} structure inside
@@ -59,7 +63,9 @@ class Main extends Component {
               dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
               dishesLoading={this.props.dishes.isLoading}
               dishesErrMess={this.props.dishes.errMess} 
-              promo={this.props.promotions.filter((promo) => promo.featured)[0]} 
+              promotion={this.props.promotions.promotions.filter((promo) => promo.featured)[0]}
+              promoLoading={this.props.promotions.isLoading}
+              promoErrMess={this.props.promotions.errMess} 
               leader={this.props.leaders.filter((leader) => leader.featured)[0]}
             />
         );
@@ -73,8 +79,8 @@ class Main extends Component {
         <DishDetail dish={this.props.dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
         isLoading={this.props.dishes.isLoading}
         errMess={this.props.dishes.errMess}
-        comment={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
-        
+        comment={this.props.comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
+        commentsErrMess={this.props.comments.errMess}
         //passing addComment as props ("addComment" converted to props by "mapDispatchtoProps" function). Pass the "addComment" function to "DishDetail" component,
         //where the user inputs their feedback of the food 
         addComment={this.props.addComment} />

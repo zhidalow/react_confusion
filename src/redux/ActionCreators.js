@@ -1,5 +1,5 @@
 import * as ActionTypes from './ActionTypes';
-import { DISHES } from '../shared/dishes';
+import { baseUrl } from '../shared/baseUrl';
 
 //defining external constant to pass required parameters to "dispatch()" method. Needs 2 main params: Actiontype and payload. Payload is usually js array 
 //(type:"ADD_COMMENT",payload: { *js obj here* })
@@ -19,10 +19,11 @@ export const fetchDishes = () => (dispatch) => {
     //thunk has 2 dispatches. dishesLoading will display the "Loading screen"
     dispatch(dishesLoading(true));
 
-    //"addDishes" will occur after 2000ms 
-    setTimeout(() => {
-        dispatch(addDishes(DISHES));
-    }, 2000);
+    return fetch(baseUrl + 'dishes')
+    //promise resolve; convert response to json for debugging and logging
+    .then(response => response.json())
+    //dishes dispatched to redux store 
+    .then(dishes => dispatch(addDishes(dishes)));
 }
 
 export const dishesLoading = () => ({
@@ -37,4 +38,43 @@ export const dishesFailed = (errmess) => ({
 export const addDishes = (dishes) => ({
     type: ActionTypes.ADD_DISHES,
     payload: dishes
+});
+
+export const fetchComments = () => (dispatch) => {    
+    return fetch(baseUrl + 'comments')
+    .then(response => response.json())
+    .then(comments => dispatch(addComments(comments)));
+};
+
+export const commentsFailed = (errmess) => ({
+    type: ActionTypes.COMMENTS_FAILED,
+    payload: errmess
+});
+
+export const addComments = (comments) => ({
+    type: ActionTypes.ADD_COMMENTS,
+    payload: comments
+});
+
+export const fetchPromos = () => (dispatch) => {
+    
+    dispatch(promosLoading());
+
+    return fetch(baseUrl + 'promotions')
+    .then(response => response.json())
+    .then(promos => dispatch(addPromos(promos)));
+}
+
+export const promosLoading = () => ({
+    type: ActionTypes.PROMOS_LOADING
+});
+
+export const promosFailed = (errmess) => ({
+    type: ActionTypes.PROMOS_FAILED,
+    payload: errmess
+});
+
+export const addPromos = (promos) => ({
+    type: ActionTypes.ADD_PROMOS,
+    payload: promos
 });
