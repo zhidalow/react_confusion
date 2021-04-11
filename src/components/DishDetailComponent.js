@@ -24,7 +24,7 @@ function RenderDish ({dish}) {
 }
 
 //passing in addComment and dishId as props (addComment has already been mapped to props)
-function RenderComments ({comments, addComment, dishId}) {      
+function RenderComments ({comments, postComment, dishId}) {      
         
     const listitems = comments.map((group) => {/*variable included inside the function, that's why got double brackets at the start*/
             return (
@@ -46,7 +46,7 @@ function RenderComments ({comments, addComment, dishId}) {
                 <div>
                 <h4>Comments</h4>
                     {listitems}
-                    <Comment dishId={dishId} addComment={addComment}/>
+                    <Comment dishId={dishId} postComment={postComment}/>
                 </div>
 
         )
@@ -78,7 +78,7 @@ class Comment extends Component {
         this.toggleModal();
         //alert('Current State is: ' + JSON.stringify(values));
         //console.log(this.props.dishId);
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
 
     }
 
@@ -201,7 +201,7 @@ const DishDetail = (props) => {
                     
                     <div className="col-xs-12 col-sm-12 col-md-5 m-1">
                         <RenderComments comments={props.comment} 
-                        addComment={props.addComment}
+                        postComment={props.postComment}
                         dishId={props.dish.id}/>
                     </div>
                 </div>

@@ -11,7 +11,7 @@ import Home from'./HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
+import { postComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     //"addComment" is an action creator. returns a curried function, where "addComment" input has 4 variables (dishId, rating, author, comment)
     //dispatch method needs "ActionCreator" params to send values to Redux store
-    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+    postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
     fetchDishes: () => {dispatch(fetchDishes())},
     resetFeedbackForm: () => { dispatch(actions.reset('feedback'))},
     fetchComments: () => dispatch(fetchComments()),
@@ -83,7 +83,7 @@ class Main extends Component {
         commentsErrMess={this.props.comments.errMess}
         //passing addComment as props ("addComment" converted to props by "mapDispatchtoProps" function). Pass the "addComment" function to "DishDetail" component,
         //where the user inputs their feedback of the food 
-        addComment={this.props.addComment} />
+        postComment={this.props.postComment} />
       );
 
     }

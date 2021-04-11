@@ -3,15 +3,49 @@ import { baseUrl } from '../shared/baseUrl';
 
 //defining external constant to pass required parameters to "dispatch()" method. Needs 2 main params: Actiontype and payload. Payload is usually js array 
 //(type:"ADD_COMMENT",payload: { *js obj here* })
-export const addComment = (dishId, rating, author, comment) => ({
+export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
-    payload: {
+    payload: comment
+});
+
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+
+    const newComment = {
         dishId: dishId,
         rating: rating,
         author: author,
         comment: comment
-    }
-});
+    };
+    newComment.date = new Date().toISOString();
+    
+    //this return is a combination of "fetch" + "POST"; "fetch" current server side "comments" json,
+    //and then "POST" the newComment added in <Comment> modal popup.
+    return fetch(baseUrl + 'comments', {
+        method: "POST",
+        //"POST" operation requires us to send the data in the "body" of the message
+        body: JSON.stringify(newComment),
+        //"headers" "application/json" to indicate body is in json format
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            throw error;
+      })
+    .then(response => response.json())
+    .then(response => dispatch(addComment(response)))
+    .catch(error =>  { console.log('post comments', error.message); alert('Your comment could not be posted\nError: '+error.message); });
+};
 
 //thunks are all implemented as functions; inner functions will receive dispatch payloads and handle actions 
 export const fetchDishes = () => (dispatch) => {
