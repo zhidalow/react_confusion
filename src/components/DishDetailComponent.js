@@ -9,17 +9,24 @@ import { Button, Modal, ModalHeader, ModalBody, Label } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 function RenderDish ({dish}) {
 
     return(
-        <Card>
-            <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
-            <CardBody>
-                <CardTitle>{dish.name}</CardTitle>
-                <CardText>{dish.description}</CardText>
-            </CardBody>
-        </Card>
+        <FadeTransform
+                in
+                transformProps={{
+                    exitTransform: 'scale(0.5) translateY(-50%)'
+                }}>
+            <Card>
+                <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
+                <CardBody>
+                    <CardTitle>{dish.name}</CardTitle>
+                    <CardText>{dish.description}</CardText>
+                </CardBody>
+            </Card>
+        </FadeTransform>
     );
 }
 
@@ -31,11 +38,13 @@ function RenderComments ({comments, postComment, dishId}) {
     
             <div style={{fontSize:14}}>
                 <ul style={{paddingLeft:"0px", listStyle:"none"}}>
+                    <Fade in>
                     <li key={group.id} style={{listStyleType:"none"}}>
                         <div>{group.comment}</div>
                         -- {group.author + " " + 
                         new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(group.date.substring(0,10))))}
                     </li>
+                    </Fade>
                 </ul>
             </div>)
         
@@ -45,7 +54,9 @@ function RenderComments ({comments, postComment, dishId}) {
         return (
                 <div>
                 <h4>Comments</h4>
+                <Stagger in>
                     {listitems}
+                </Stagger>
                     <Comment dishId={dishId} postComment={postComment}/>
                 </div>
 
