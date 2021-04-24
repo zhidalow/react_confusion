@@ -32,30 +32,27 @@ function RenderDish ({dish}) {
 
 //passing in addComment and dishId as props (addComment has already been mapped to props)
 function RenderComments ({comments, postComment, dishId}) {      
-        
-    const listitems = comments.map((group) => {/*variable included inside the function, that's why got double brackets at the start*/
-            return (
-    
-            <div style={{fontSize:14}}>
-                <ul style={{paddingLeft:"0px", listStyle:"none"}}>
-                    <Fade in>
-                    <li key={group.id} style={{listStyleType:"none"}}>
-                        <div>{group.comment}</div>
-                        -- {group.author + " " + 
-                        new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(group.date.substring(0,10))))}
-                    </li>
-                    </Fade>
-                </ul>
-            </div>)
-        
-}
-    );
-    
         return (
                 <div>
                 <h4>Comments</h4>
                 <Stagger in>
-                    {listitems}
+                    {comments.map((group) => {/*variable included inside the function, that's why got double brackets at the start*/
+                return (
+        
+                <div style={{fontSize:14}}>
+                    <ul style={{paddingLeft:"0px", listStyle:"none"}}>
+                        <Fade in>
+                        <li key={group.id} style={{listStyleType:"none"}}>
+                            <div>{group.comment}</div>
+                            -- {group.author + " " + 
+                            new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(group.date.substring(0,10))))}
+                        </li>
+                        </Fade>
+                    </ul>
+                </div>)
+        
+}
+    )}
                 </Stagger>
                     <Comment dishId={dishId} postComment={postComment}/>
                 </div>
