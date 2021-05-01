@@ -198,3 +198,52 @@ export const addLeaders = (leaders) => ({
   type: ActionTypes.ADD_LEADERS,
   payload: leaders
 });
+
+//implementing postFeedback action to update server data
+
+export const postFeedback = (firstname, lastname, telnum, email, agree, contactType, message) => (dispatch) => {
+
+  const newFeedback = {
+    firstname: firstname,
+    lastname: lastname,
+    telnum: telnum,
+    email: email,
+    agree: agree,
+    contactType: contactType,
+    message: message
+  };
+  newFeedback.date = new Date().toISOString();
+  
+  //this return is a combination of "fetch" + "POST"; "fetch" current server side "comments" json,
+  //and then "POST" the newComment added in <Comment> modal popup.
+  return fetch(baseUrl + 'feedback', {
+      method: "POST",
+      //"POST" operation requires us to send the data in the "body" of the message
+      body: JSON.stringify(newFeedback),
+      //"headers" "application/json" to indicate body is in json format
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+          throw error;
+    })
+  .then(response => response.json())
+  .then(response => dispatch(addFeedback(response)))
+  .catch(error =>  { console.log('post feedback', error.message); alert('Your feedback could not be posted\nError: '+error.message); });
+  };
+
+  export const addFeedback = (feedback) => ({
+    type: ActionTypes.ADD_FEEDBACK,
+    payload: feedback
+});

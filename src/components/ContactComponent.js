@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 // react-redux-form simplifies many of the form creation implementation; no longer need handleBlur, handleChange, 
 //no need store state within "ContactComponent", all state changes handled by redux instead now
-import { Control, Form, Errors, actions } from 'react-redux-form';
+import { Control, Form, Errors } from 'react-redux-form';
 
 //"required" to check if this compulsory field is empty
 const required = (val) => val && val.length;
@@ -34,7 +34,8 @@ class Contact extends Component {
     //updating input to be js obj "values", as we are no longer keeping track of values using "this.state"
     handleSubmit(values) {
         console.log("Current State is: " + JSON.stringify(values));
-        alert("Current State is: " + JSON.stringify(values));
+        alert("Thank you for your feedback!" + JSON.stringify(values));
+        this.props.postFeedback(values.firstname, values.lastname, values.telnum, values.email, values.agree, values.contactType, values.message);
         this.props.resetFeedbackForm();
     }
 

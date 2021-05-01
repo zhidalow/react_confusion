@@ -11,7 +11,7 @@ import Home from'./HomeComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
+import { postFeedback, postComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -29,9 +29,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
 
   return {
-    //"addComment" is an action creator. returns a curried function, where "addComment" input has 4 variables (dishId, rating, author, comment)
     //dispatch method needs "ActionCreator" params to send values to Redux store
     postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
+    postFeedback: (firstname, lastname, telnum, email, agree, contactType, message) => dispatch(postFeedback(firstname, lastname, telnum, email, agree, contactType, message)),
     fetchDishes: () => {dispatch(fetchDishes())},
     resetFeedbackForm: () => { dispatch(actions.reset('feedback'))},
     fetchComments: () => dispatch(fetchComments()),
@@ -118,7 +118,7 @@ class Main extends Component {
               {/* ":" passes whatever is after the ":" as a token with 3 props: "match","location" and "history" */}
               <Route path="/menu/:dishId" component={DishWithId} />
 
-              <Route exact path="/contactus" component = {() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+              <Route exact path="/contactus" component = {() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} postFeedback={this.props.postFeedback}/>} />
 
               {/* implementing "Route" for aboutus page */}
               <Route path="/aboutus" component={AboutPage} />
